@@ -2,7 +2,6 @@ package com.iexpress.android.dicee;
 
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +19,11 @@ import java.io.InputStream;
 public class DiceeActivityFragment extends Fragment {
     private static final String TAG = "Dicee Activity Fragment";
 
+    private AssetManager assetManager;
+
     private ImageView backgroundImageView;
+
+    private ImageView logoImageView;
 
     public DiceeActivityFragment() {
     }
@@ -28,18 +31,25 @@ public class DiceeActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        assetManager = getActivity().getAssets();
 
         View view =  inflater.inflate(R.layout.fragment_dicee, container, false);
 
-        backgroundImageView = (ImageView) view.findViewById(R.id.backGroundImageView);
-        AssetManager am = getActivity().getAssets();
-        try (InputStream stream = am.open("newbackgroundLarge.png")) {
-            Drawable drawable = Drawable.createFromStream(stream, "newbackgroundLarge");
-            backgroundImageView.setImageDrawable(drawable);
-        } catch (IOException e) {
-            Log.e(TAG, "Error loading " + "newbackgroundLarge.png", e);
-        }
+        backgroundImageView = view.findViewById(R.id.backGroundImageView);
+        blitImage(backgroundImageView, "newbackgroundLarge", ".png");
+
+        logoImageView = view.findViewById(R.id.logoImageView);
+        blitImage(logoImageView, "diceeLogo", ".png");
 
         return view;
+    }
+
+    public void blitImage(ImageView imageView, String imageResourceName, String imageFileSuffix) {
+        try (InputStream stream = assetManager.open(imageResourceName + imageFileSuffix)) {
+            Drawable drawable = Drawable.createFromStream(stream, imageResourceName);
+            imageView.setImageDrawable(drawable);
+        } catch (IOException e) {
+            Log.e(TAG, "Error loading " + imageResourceName + imageFileSuffix, e);
+        }
     }
 }
