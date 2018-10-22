@@ -41,14 +41,10 @@ public class DiceeActivityFragment extends Fragment {
             // this Toast not showed up yet
             Toast.makeText(getActivity(), "Roll....", Toast.LENGTH_LONG);
 
-            randomizeDices();
-
+            DiceeUtil.randomizeDices(getActivity().getAssets(), dice1ImageView, dice2ImageView);
         }
     };
 
-    private String[] diceImages = {"dice1", "dice2", "dice3", "dice4", "dice5", "dice6"};
-
-    private Random random = new Random(System.currentTimeMillis());
 
     public DiceeActivityFragment() {
     }
@@ -61,36 +57,20 @@ public class DiceeActivityFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_dicee, container, false);
 
         backgroundImageView = view.findViewById(R.id.backGroundImageView);
-        blitImage(backgroundImageView, "newbackgroundLarge", ".png");
+        DiceeUtil.blitImage(assetManager, backgroundImageView, "newbackgroundLarge", ".png");
 
         logoImageView = view.findViewById(R.id.logoImageView);
-        blitImage(logoImageView, "diceeLogo", ".png");
+        DiceeUtil.blitImage(assetManager, logoImageView, "diceeLogo", ".png");
 
         dice1ImageView = view.findViewById(R.id.dice1ImageView);
         dice2ImageView = view.findViewById(R.id.dice2ImageView);
 
-        randomizeDices();
+        DiceeUtil.randomizeDices(assetManager, dice1ImageView, dice2ImageView);
 
         rollButton = view.findViewById(R.id.rollButton);
         rollButton.setOnClickListener(rollButtonOnClickListener);
 
         return view;
-    }
-
-    public void blitImage(ImageView imageView, String imageResourceName, String imageFileSuffix) {
-        try (InputStream stream = assetManager.open(imageResourceName + imageFileSuffix)) {
-            Drawable drawable = Drawable.createFromStream(stream, imageResourceName);
-            imageView.setImageDrawable(drawable);
-        } catch (IOException e) {
-            Log.e(TAG, "Error loading " + imageResourceName + imageFileSuffix, e);
-        }
-    }
-
-    public void randomizeDices() {
-        blitImage(dice1ImageView, diceImages[random.nextInt(diceImages.length)], ".png");
-        blitImage(dice2ImageView, diceImages[random.nextInt(diceImages.length)], ".png");
-
-
     }
 
 }
