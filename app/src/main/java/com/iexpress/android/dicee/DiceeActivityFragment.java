@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -24,6 +28,27 @@ public class DiceeActivityFragment extends Fragment {
     private ImageView backgroundImageView;
 
     private ImageView logoImageView;
+
+    private ImageView dice1ImageView;
+
+    private ImageView dice2ImageView;
+
+    private Button rollButton;
+
+    private OnClickListener rollButtonOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // this Toast not showed up yet
+            Toast.makeText(getActivity(), "Roll....", Toast.LENGTH_LONG);
+
+            randomizeDices();
+
+        }
+    };
+
+    private String[] diceImages = {"dice1", "dice2", "dice3", "dice4", "dice5", "dice6"};
+
+    private Random random = new Random(System.currentTimeMillis());
 
     public DiceeActivityFragment() {
     }
@@ -41,6 +66,14 @@ public class DiceeActivityFragment extends Fragment {
         logoImageView = view.findViewById(R.id.logoImageView);
         blitImage(logoImageView, "diceeLogo", ".png");
 
+        dice1ImageView = view.findViewById(R.id.dice1ImageView);
+        dice2ImageView = view.findViewById(R.id.dice2ImageView);
+
+        randomizeDices();
+
+        rollButton = view.findViewById(R.id.rollButton);
+        rollButton.setOnClickListener(rollButtonOnClickListener);
+
         return view;
     }
 
@@ -52,4 +85,12 @@ public class DiceeActivityFragment extends Fragment {
             Log.e(TAG, "Error loading " + imageResourceName + imageFileSuffix, e);
         }
     }
+
+    public void randomizeDices() {
+        blitImage(dice1ImageView, diceImages[random.nextInt(diceImages.length)], ".png");
+        blitImage(dice2ImageView, diceImages[random.nextInt(diceImages.length)], ".png");
+
+
+    }
+
 }
