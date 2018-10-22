@@ -4,3 +4,4 @@ Android 6 practice, implement Angela Yu's iOS Dicee project (swift) which is alr
 1. Screen Snapshot
 
 ![alt text](app/src/main/asserts/dicee_snapshot.png)
+
